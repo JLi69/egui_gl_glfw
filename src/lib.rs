@@ -15,8 +15,7 @@ use egui::*;
 mod clipboard;
 
 use clipboard::{
-    ClipboardContext, // TODO: remove
-    ClipboardProvider,
+    Clipboard as ClipboardContext, // TODO: remove
 };
 
 pub struct EguiInputState {
@@ -141,7 +140,7 @@ pub fn handle_event(event: glfw::WindowEvent, state: &mut EguiInputState) {
                     if let Some(clipboard_ctx) = state.clipboard.as_mut() {
                         state.input.events.push(egui::Event::Text(
                             clipboard_ctx
-                                .get_contents()
+                                .get_text()
                                 .unwrap_or_else(|_| "".to_string()),
                         ));
                     }
@@ -180,7 +179,7 @@ pub fn handle_event(event: glfw::WindowEvent, state: &mut EguiInputState) {
                     if let Some(clipboard_ctx) = state.clipboard.as_mut() {
                         state.input.events.push(egui::Event::Text(
                             clipboard_ctx
-                                .get_contents()
+                                .get_text()
                                 .unwrap_or_else(|_| "".to_string()),
                         ));
                     }
@@ -304,7 +303,7 @@ pub fn init_clipboard() -> Option<ClipboardContext> {
 
 pub fn copy_to_clipboard(egui_state: &mut EguiInputState, copy_text: String) {
     if let Some(clipboard) = egui_state.clipboard.as_mut() {
-        let result = clipboard.set_contents(copy_text);
+        let result = clipboard.set_text(copy_text);
         if result.is_err() {
             dbg!("Unable to set clipboard content.");
         }
