@@ -139,9 +139,7 @@ pub fn handle_event(event: glfw::WindowEvent, state: &mut EguiInputState) {
                 } else if state.modifiers.command && key == egui::Key::V {
                     if let Some(clipboard_ctx) = state.clipboard.as_mut() {
                         state.input.events.push(egui::Event::Text(
-                            clipboard_ctx
-                                .get_text()
-                                .unwrap_or_else(|_| "".to_string()),
+                            clipboard_ctx.get_text().unwrap_or_else(|_| "".to_string()),
                         ));
                     }
                 } else {
@@ -178,9 +176,7 @@ pub fn handle_event(event: glfw::WindowEvent, state: &mut EguiInputState) {
                 } else if state.modifiers.command && key == egui::Key::V {
                     if let Some(clipboard_ctx) = state.clipboard.as_mut() {
                         state.input.events.push(egui::Event::Text(
-                            clipboard_ctx
-                                .get_text()
-                                .unwrap_or_else(|_| "".to_string()),
+                            clipboard_ctx.get_text().unwrap_or_else(|_| "".to_string()),
                         ));
                     }
                 } else {
