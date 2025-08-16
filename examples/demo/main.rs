@@ -139,13 +139,15 @@ fn main() {
             platform_output,
             textures_delta,
             shapes,
-            pixels_per_point,
+            pixels_per_point: _,
             viewport_output: _,
         } = egui_ctx.end_pass();
 
         //Handle cut, copy text from egui
-        if !platform_output.copied_text.is_empty() {
-            egui_backend::copy_to_clipboard(&mut egui_input_state, platform_output.copied_text);
+        for command in platform_output.commands {
+            if let egui::OutputCommand::CopyText(copied_text) = command {
+                egui_backend::copy_to_clipboard(&mut egui_input_state, copied_text);
+            }
         }
 
         //Note: passing a bg_color to paint_jobs will clear any previously drawn stuff.
@@ -153,8 +155,8 @@ fn main() {
         //drawing calls with it.
         //Since we are custom drawing an OpenGL Triangle we don't need egui to clear the background.
 
-        let clipped_shapes = egui_ctx.tessellate(shapes, pixels_per_point);
-        painter.paint_and_update_textures(1.0, &clipped_shapes, &textures_delta);
+        let clipped_shapes = egui_ctx.tessellate(shapes, native_pixels_per_point);
+        painter.paint_and_update_textures(native_pixels_per_point, &clipped_shapes, &textures_delta);
 
         for (_, event) in glfw::flush_messages(&events) {
             match event {
